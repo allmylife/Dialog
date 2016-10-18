@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+</head>
+<style type="text/css">
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	body {
+		font-size: 12px;
+		padding: 20px;
+	}
+	button {
+		display: block;
+		width: 100%;
+		padding:10px;
+		margin:20px 0;
+		background-color:green;
+		color:#fff;
+		border-radius:10px;
+	}
+</style>
+<link rel="stylesheet" href="css/index.css">
+<body>
+
+	<!-- <div class="g_dialog_container">
+		<div class="dialog_window">
+			<div class="dialog_header loading"></div>
+			<div class="dialog_content">你确定要删除购物车吗</div>
+			<div class="dialog_footer">
+				<button class="green">确定</button>
+				<button>取消</button>
+				<button class="red">取消</button>
+			</div>
+		</div>
+	</div> -->
+
+	<button id="btn1">没有传递任何参数(需手动关闭)</button>
+	<button id="btn2">弹出一个不带任何按钮,且是警告框,并且2秒后关闭</button>
+	<button id="btn3">弹出一个有确认和取消按钮的成功框,点击按钮直接关闭</button>
+	<button id="btn4">弹出一个有确认按钮的警告框,点击按钮不关闭(需手动关闭)</button>
+	<button id="btn5">弹出一个多组合的按钮框,且按钮样式可定制</button>
+	<button id="btn6">弹出一个确认和删除的框,点击确认弹出加载框2秒自动关闭</button>
+	<button id="btn7">带有动画效果的按钮</button>
+	<button id="btn8">弹框层级累加</button>
+	<button id="btn9">2秒后关闭，执行回调函数</button>
+	<button id="btn10">可以关闭遮罩层</button>
+</body>
+<script src="http://zeptojs.com/zepto.min.js"></script>
+<script src="js/index.js"></script>
+<script>
+	// var d = new Dialog({
+	// 	// width:100,
+	// 	// height:50,
+	// 	message:"你确定删除吗?",
+	// 	type:"ok",
+	// 	buttons:[
+	// 		{
+	// 			type:"red",
+	// 			text:"不好",
+				
+	// 		},
+	// 		{
+	// 			type:"green",
+	// 			text:"好",
+	// 			callback: function() {
+	// 				alert(2);
+
+	// 				return false;
+	// 			}
+	// 		}
+	// 	],
+	// 	// delay:3000,
+	// 	maskOpacity:0.5
+	// })
+
+$('#btn1').on('click', function() {
+	var d = $.dialog();
+});
+
+$('#btn2').on('click', function() {
+	var d = $.dialog({
+		type:"warning",
+		message:"2秒后关闭",
+		delay:2000
+	});
+});
+
+$('#btn3').on('click', function() {
+	var d = $.dialog({
+		type:"ok",
+		message:"一个带有确认和取消按钮的成功框",
+		buttons:[
+			{
+				text:"确认"
+			}, {
+				text:"取消"
+			}
+		],
+	});
+});
+
+$('#btn4').on('click', function() {
+	var d = $.dialog({
+		type:"warning",
+		message:"我叫警告框",
+		buttons:[
+			{
+				type:"red",
+				text:"确认",
+				callback:function() {
+					alert("点击我不会关闭");
+
+					return false;
+				}
+			}
+		]
+	});
+})
+
+$('#btn5').on('click', function() {
+	var d = $.dialog({
+		type:"loading",
+		message:"多组合的按钮框,且按钮样式可定制",
+		buttons:[
+			{
+				type:"red",
+				text:"确认",
+				callback:function() {
+					alert("点击我可以关闭");
+
+				}
+			},
+			{
+				text:"确认",
+				callback:function() {
+					alert("点击我可以关闭");
+
+				}
+			},
+			{
+				type:"green",
+				text:"确认",
+				callback:function() {
+					alert("点击我可以关闭");
+
+				}
+			},
+		]
+	});
+});
+
+$('#btn6').on('click', function() {
+	var d = $.dialog({
+		type:"warning",
+		message:"我叫警告框",
+		buttons:[
+			{
+				type:"green",
+				text:"确认",
+				callback:function() {
+					alert("点击我不可以关闭");
+
+					return false;
+				}
+			},
+			{
+				type:"red",
+				text:"删除",
+				callback:function() {
+					$.dialog({
+						type:"warning",
+						message:"点击我删除上一个弹出框",
+						buttons:[
+							{
+								text:"确定",
+								callback:function() {
+
+								d.close();
+								return false;
+								}
+							}
+						]
+					});		
+					return false;				
+				}
+			},
+		]
+	});
+});
+
+$('#btn7').on('click', function() {
+	var d = $.dialog({
+		type:"warning",
+		message:"你好",
+		buttons:[
+		{
+			type:"green",
+			text:"确定",
+		},
+		{
+			type:"red",
+			text:"删除"
+		}
+		],
+		effect:true
+	});
+});
+
+$('#btn8').on('click', function() {
+	var d = $.dialog({
+		type:"warning",
+		message:"点击确定弹出第二框",
+		buttons:[
+		{
+			type:"green",
+			text:"确定",
+			callback:function() {
+				$.dialog({
+					type:"ok",
+					message:"我是第二个框",
+					buttons:[
+					{
+						type:"green",
+						text:"确定",
+						callback:function() {
+							return false;
+						}
+					}
+					]
+				});
+				return false;
+			}
+		},
+		{
+			type:"red",
+			text:"删除",
+			callback:function() {
+				return false;
+			}
+		}
+		],
+		effect:true
+	});
+});
+
+$('#btn9').on('click', function() {
+	var d = $.dialog({
+
+		type:"loading",
+		message:"2秒后关闭,执行回调函数",
+		delay:2000,
+		delayCallback:function() {
+			alert("我是关闭后执行的函数");
+		}
+	});
+});
+$('#btn10').on('click', function() {
+	var d = $.dialog({
+
+		type:"loading",
+		message:"2秒后关闭,执行回调函数",
+		buttons:[
+		{
+			type:"green",
+			text:"确定"
+		},
+		{
+			type:"red",
+			text:"删除",
+			callback:function() {
+				// 这里返回false，依然被关闭，和事件冒泡有关系
+				return false;
+			}
+		}
+		],
+		maskOpacity:0.6,
+		maskClose:true
+	});
+});
+</script>
+</html>
